@@ -1,7 +1,7 @@
 # WrapRmd
 
 An [RStudio Addin](https://rstudio.github.io/rstudioaddins/) to wrap paragraphs
-of RMarkdown text.
+of RMarkdown text without inserting line breaks into inline R code.
 
 ## Overview
 

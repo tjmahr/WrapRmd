@@ -7,6 +7,6 @@
 wrap_rmd_addin()
 }
 \description{
-Call this addin to wrap paragraphs in an R Markdown document
+Call this addin to wrap paragraphs in an R Markdown document.
 }
 

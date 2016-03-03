@@ -19,8 +19,8 @@ Wrap text but don't insert lines breaks into inline R code
 }
 \details{
 This function finds all inline R code spans in a string, replaces
-  all non-word characters and spaces the inline R spans with underscores,
-  wraps the string and restores the original inline R spans.It's not going to
+  all non-word characters in the R spans with underscores, re-wraps the
+  string, and restores the original inline R spans. This function cannot
   handle any inline code that uses backticks.
 }
 

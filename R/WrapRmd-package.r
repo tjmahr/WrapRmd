@@ -16,8 +16,8 @@ NULL
 #' @return a wrapped copy of the string
 #'
 #' @details This function finds all inline R code spans in a string, replaces
-#'   all non-word characters and spaces the inline R spans with underscores,
-#'   wraps the string and restores the original inline R spans.It's not going to
+#'   all non-word characters in the R spans with underscores, re-wraps the
+#'   string, and restores the original inline R spans. This function cannot
 #'   handle any inline code that uses backticks.
 #' @export
 str_rmd_wrap <- function(string, width = 80, indent = 0, exdent = 0) {
@@ -31,7 +31,7 @@ str_rmd_wrap <- function(string, width = 80, indent = 0, exdent = 0) {
     return(str_wrap(string, width, indent, exdent))
   }
 
-  # Make R code chunks into to long words
+  # Make R code spans into long words
   spaceless_code <- inline_code %>% str_replace_all("\\W| ", "_")
 
   for (i in seq_along(inline_code)) {
@@ -41,7 +41,7 @@ str_rmd_wrap <- function(string, width = 80, indent = 0, exdent = 0) {
   # Wrap
   output <- str_wrap(output, width, indent, exdent)
 
-  # Put original code chunks back
+  # Put original code spans back
   for (i in seq_along(inline_code)) {
     output <- stringi::stri_replace_first_coll(
       str = output,
@@ -55,7 +55,8 @@ str_rmd_wrap <- function(string, width = 80, indent = 0, exdent = 0) {
 
 #' Wrap text but don't insert lines breaks into inline R code
 #'
-#' Call this addin to wrap paragraphs in an R Markdown document
+#' Call this addin to wrap paragraphs in an R Markdown document.
+#'
 #' @export
 wrap_rmd_addin <- function() {
   context <- rstudioapi::getActiveDocumentContext()
