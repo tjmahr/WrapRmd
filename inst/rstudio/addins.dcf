@@ -1,0 +1,4 @@
+Name: Wrap Rmd
+Description: Wrap selected R Markdown text but don't insert lines breaks into inline R code
+Binding: wrap_rmd_addin
+Interactive: false
