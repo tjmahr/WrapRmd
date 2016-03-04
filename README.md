@@ -11,7 +11,7 @@ Here is some nice looking R Markdown:
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante = `r length(letters) * 2 + 100`.
 ```
 
-You highlight the text, and hit ctrl/cmd + shift + / to wrap the text and get:
+You highlight the text, and hit `Ctrl/Cmd + Shift + /` to wrap the text and get:
 
 ```
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a `r
@@ -34,5 +34,8 @@ a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante =
 ## Notes
 
 Install with `devtools::install_github("tjmahr/WrapRmd")`
+
+Then go to Tools > Addins in RStudio to select and configure addins. I've mapped 
+this one addin to the shortcut `Ctrl + Shift + Alt + /`.
 
 Currently, the package wraps lines using a maximum line width of 80 characters.
