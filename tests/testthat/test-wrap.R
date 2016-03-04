@@ -87,6 +87,23 @@ text in p2.
   expect_equal(str_rmd_wrap(paragraphs_sttstss), paragraphs_sttstss_wrapped)
 
 
+  # trailing blank lines are preserved
+  paragraphs_sttsts <-
+"
+text in p1.
+extra text in p1.
+
+text in p2.
+"
+
+  paragraphs_sttsts_wrapped <-
+"
+text in p1. extra text in p1.
+
+text in p2.
+"
+  expect_equal(str_rmd_wrap(paragraphs_sttsts), paragraphs_sttsts_wrapped)
+
 
 })
 

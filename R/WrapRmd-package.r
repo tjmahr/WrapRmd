@@ -38,18 +38,24 @@ str_rmd_wrap <- function(string, width = 80, indent = 0, exdent = 0) {
   # Assume paragraphs are separated by [newline][optional spaces][newline].
   re_paragraph_sep <- "(\\n\\s*\\n)"
 
-  # Need to preserve blank lines at start
+  # Need to preserve blank lines at start and end
   re_blanks_at_start <- "(^\\s*\\n)"
-  re_start_or_sep <- paste(re_blanks_at_start, re_paragraph_sep, sep = "|")
+  re_blanks_at_close <- "(\\s*\\n$)"
+
+  re_start_or_sep_or_close <- paste(
+    re_blanks_at_start,
+    re_paragraph_sep,
+    re_blanks_at_close,
+    sep = "|")
 
   # Find paragraph separations
   paragraph_seps <- string %>%
-    str_extract_all(re_start_or_sep) %>%
+    str_extract_all(re_start_or_sep_or_close) %>%
     unlist
 
   # Split at those points to get paragraphs.
   paragraphs <- string %>%
-    str_split(re_start_or_sep) %>%
+    str_split(re_start_or_sep_or_close) %>%
     unlist %>%
     unname
 
