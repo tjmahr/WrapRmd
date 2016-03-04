@@ -31,17 +31,25 @@ wrap_rmd_addin <- function() {
 #'   all non-word characters in the R spans with underscores, re-wraps the
 #'   string, and restores the original inline R spans. This function cannot
 #'   handle any inline code that uses backticks.
+#'
+#'   This function preserves blanks lines between paragraphs.
 #' @export
 str_rmd_wrap <- function(string, width = 80, indent = 0, exdent = 0) {
-  # Two paragraphs are separated by [line break [spaces] line break]. Find those
-  # points.
+  # Assume paragraphs are separated by [newline][optional spaces][newline].
+  re_paragraph_sep <- "(\\n\\s*\\n)"
+
+  # Need to preserve blank lines at start
+  re_blanks_at_start <- "(^\\s*\\n)"
+  re_start_or_sep <- paste(re_blanks_at_start, re_paragraph_sep, sep = "|")
+
+  # Find paragraph separations
   paragraph_seps <- string %>%
-    str_extract_all("\\n\\s*\\n") %>%
+    str_extract_all(re_start_or_sep) %>%
     unlist
 
   # Split at those points to get paragraphs.
   paragraphs <- string %>%
-    str_split("\\n\\s*\\n") %>%
+    str_split(re_start_or_sep) %>%
     unlist %>%
     unname
 
@@ -54,6 +62,7 @@ str_rmd_wrap <- function(string, width = 80, indent = 0, exdent = 0) {
 }
 
 
+# Interleave two vectors of strings
 str_interleave <- function(strings, interleaves) {
   if (length(strings) == 1) return(strings)
   stopifnot(length(strings) - length(interleaves) == 1)
@@ -61,12 +70,11 @@ str_interleave <- function(strings, interleaves) {
   # Pop the first string off. Concatenate pairs of interleaves and strings.
   start <- head(strings, 1)
   left <- tail(strings, -1)
-  body <- paste0(paste0(interleaves, left, collapse = ""))
+  body <- paste0(interleaves, left, collapse = "")
 
   # Reattach head
   paste0(start, body)
 }
-
 
 str_rmd_wrap_one <- function(string, width = 80, indent = 0, exdent = 0) {
   stopifnot(length(string) == 1)

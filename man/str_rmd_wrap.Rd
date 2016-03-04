@@ -22,5 +22,7 @@ This function finds all inline R code spans in a string, replaces
   all non-word characters in the R spans with underscores, re-wraps the
   string, and restores the original inline R spans. This function cannot
   handle any inline code that uses backticks.
+
+  This function preserves blanks lines between paragraphs.
 }
 
