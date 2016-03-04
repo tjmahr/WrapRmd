@@ -9,6 +9,18 @@
 NULL
 
 
+#' Wrap text but don't insert lines breaks into inline R code
+#'
+#' Call this addin to wrap paragraphs in an R Markdown document.
+#'
+#' @export
+wrap_rmd_addin <- function() {
+  context <- rstudioapi::getActiveDocumentContext()
+  selection <- context$selection
+  text <- unlist(selection)["text"]
+  rstudioapi::insertText(str_rmd_wrap(text))
+}
+
 
 #' Wrap text but don't insert lines breaks into inline R code
 #' @param string a string to wrap
@@ -21,6 +33,42 @@ NULL
 #'   handle any inline code that uses backticks.
 #' @export
 str_rmd_wrap <- function(string, width = 80, indent = 0, exdent = 0) {
+  # Two paragraphs are separated by [line break [spaces] line break]. Find those
+  # points.
+  paragraph_seps <- string %>%
+    str_extract_all("\\n\\s*\\n") %>%
+    unlist
+
+  # Split at those points to get paragraphs.
+  paragraphs <- string %>%
+    str_split("\\n\\s*\\n") %>%
+    unlist %>%
+    unname
+
+  # Wrap each paragraph.
+  paragraphs <- Map(str_rmd_wrap_one, paragraphs) %>%
+    unlist %>%
+    unname
+
+  str_interleave(paragraphs, paragraph_seps)
+}
+
+
+str_interleave <- function(strings, interleaves) {
+  if (length(strings) == 1) return(strings)
+  stopifnot(length(strings) - length(interleaves) == 1)
+
+  # Pop the first string off. Concatenate pairs of interleaves and strings.
+  start <- head(strings, 1)
+  left <- tail(strings, -1)
+  body <- paste0(paste0(interleaves, left, collapse = ""))
+
+  # Reattach head
+  paste0(start, body)
+}
+
+
+str_rmd_wrap_one <- function(string, width = 80, indent = 0, exdent = 0) {
   stopifnot(length(string) == 1)
   output <- string
 
@@ -52,15 +100,3 @@ str_rmd_wrap <- function(string, width = 80, indent = 0, exdent = 0) {
   output
 }
 
-
-#' Wrap text but don't insert lines breaks into inline R code
-#'
-#' Call this addin to wrap paragraphs in an R Markdown document.
-#'
-#' @export
-wrap_rmd_addin <- function() {
-  context <- rstudioapi::getActiveDocumentContext()
-  selection <- context$selection
-  text <- unlist(selection)["text"]
-  rstudioapi::insertText(str_rmd_wrap(text))
-}

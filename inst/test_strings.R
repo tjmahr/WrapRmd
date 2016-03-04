@@ -22,3 +22,14 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a `r max(iri
 "
 
 str_rmd_wrap(gif_lines) %>% cat
+
+paragraph_preserving <- "
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante = `r length(letters) * 2 + 100`.
+
+`r hello` and `r 1 + 1` and `r 1 + b + b + c` and drop a line right here `r maybe_here` `r goodbye`
+
+
+hello
+
+"
+paragraph_preserving %>% str_rmd_wrap %>% cat
