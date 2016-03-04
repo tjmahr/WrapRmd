@@ -5,7 +5,7 @@ of RMarkdown text without inserting line breaks into inline R code.
 
 ## Overview
 
-Here is some nice looking R Markdown:
+Here is some nice looking RMarkdown:
 
 ```
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante = `r length(letters) * 2 + 100`.
