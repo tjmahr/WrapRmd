@@ -1,5 +1,8 @@
 # WrapRmd
 
+[![Travis-CI Build Status](https://travis-ci.org/tjmahr/WrapRmd.svg?branch=master)](https://travis-ci.org/tjmahr/WrapRmd)
+
+
 An [RStudio Addin](https://rstudio.github.io/rstudioaddins/) to wrap paragraphs
 of RMarkdown text without inserting line breaks into inline R code.
 
