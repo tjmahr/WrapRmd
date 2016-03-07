@@ -6,6 +6,7 @@
 #' @name WrapRmd
 #' @docType package
 #' @import stringr
+#' @importFrom utils head tail
 NULL
 
 
@@ -23,6 +24,7 @@ wrap_rmd_addin <- function() {
 
 
 #' Wrap text but don't insert lines breaks into inline R code
+#'
 #' @param string a string to wrap
 #' @param width,indent,exdent other arguments for stringr::str_wrap
 #' @return a wrapped copy of the string
@@ -86,7 +88,12 @@ str_rmd_wrap_one <- function(string, width = 80, indent = 0, exdent = 0) {
   stopifnot(length(string) == 1)
   output <- string
 
-  inline_code <- str_extract_all(string, "(`r)( )([^`]+`)") %>% unlist
+  re_inline_code <- "(`r)( )([^`]+`)"
+  re_nonword <- "\\W"
+
+  inline_code <- string %>%
+    str_extract_all(re_inline_code) %>%
+    unlist
 
   # Just wrap if no code
   if (length(inline_code) == 0) {
@@ -94,7 +101,7 @@ str_rmd_wrap_one <- function(string, width = 80, indent = 0, exdent = 0) {
   }
 
   # Make R code spans into long words
-  spaceless_code <- inline_code %>% str_replace_all("\\W| ", "_")
+  spaceless_code <- str_replace_all(inline_code, re_nonword, "_")
 
   for (i in seq_along(inline_code)) {
     output <- str_replace(output, coll(inline_code[i]), spaceless_code[i])

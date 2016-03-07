@@ -3,3 +3,5 @@
 export(str_rmd_wrap)
 export(wrap_rmd_addin)
 import(stringr)
+importFrom(utils,head)
+importFrom(utils,tail)
