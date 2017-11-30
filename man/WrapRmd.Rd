@@ -9,4 +9,3 @@
 Provides an RStudio addin for wrapping paragraphs in an RMarkdown document
 without inserting linebreaks into spans of inline R code.
 }
-

@@ -17,11 +17,25 @@ test_that("basic wrapping", {
   gif_lines <- "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante = `r length(letters) * 2 + 100`."
 
   gif_lines_wrap <-
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante =
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a
+`r max(iris$Sepal.Length)`, viverra nisl at, luctus ante =
 `r length(letters) * 2 + 100`."
 
   expect_equal(str_rmd_wrap(gif_lines), gif_lines_wrap)
+})
+
+
+test_that("does not break links (#7)", {
+  string <- "
+It's very easy to make some words **bold** and a [link to Google!](http://google.com)!
+"
+
+  string2 <- "
+It's very easy to make some words **bold** and a [link to
+Google!](http://google.com)!
+"
+
+  expect_equal(str_rmd_wrap(string), string2)
 })
 
 
@@ -36,8 +50,8 @@ test_that("preserve paragraphs", {
 hello"
 
   paragraph_preserving_wrapped <-
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante =
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a
+`r max(iris$Sepal.Length)`, viverra nisl at, luctus ante =
 `r length(letters) * 2 + 100`.
 
 `r hello` and `r 1 + 1` and `r 1 + b + b + c` and drop a line right here
