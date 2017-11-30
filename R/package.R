@@ -124,13 +124,53 @@ str_rmd_wrap_one <- function(string, width = 80) {
 }
 
 
-md_wrap <- function (string, width = 80, ...) {
+md_wrap <- function(string, width = 80, hardbreaks = FALSE, smart = FALSE,
+                     normalize = FALSE, extensions = TRUE) {
+  raw_string <- string
   string %>%
     commonmark::markdown_commonmark(
-      hardbreaks = FALSE,
-      extensions = TRUE,
-      normalize = FALSE,
-      width = 80) %>%
+      hardbreaks = hardbreaks,
+      extensions = extensions,
+      normalize = normalize,
+      smart = smart,
+      width = width) %>%
     str_replace("\\n$", "") %>%
-    stringi::stri_replace_all_regex("\\\\(!(?!\\[))", "$1")
+    unescape(raw_string, "[") %>%
+    unescape(raw_string, "]") %>%
+    unescape(raw_string, "!")
+
+  # %>%
+  #   stringi::stri_replace_all_regex("\\\\(!(?!\\[))", "$1") %>%
+  #   stringi::stri_replace_all_regex("\\\\(!(?!\\[))", "$1") %>%
+}
+
+unescape <- function(string, raw_string, target) {
+  location_in_raw <- str_locate_all(raw_string, esc(target))[[1]] %>%
+    as.data.frame()
+
+  for (i in seq_along(location_in_raw$start)) {
+    char_loc <- location_in_raw$start[[i]]
+    escaped <- substr(raw_string, char_loc - 1, char_loc) == esc(target)
+    location_in_raw$escaped[[i]] <- escaped
+  }
+
+  location_in_wrapped <- str_locate_all(string, esc(target))[[1]]
+
+  for (i in seq_along(location_in_wrapped[, 1])) {
+    char_loc <- location_in_wrapped[i, 1]
+    escaped_in_wrapped <- substr(string, char_loc - 1, char_loc) == esc(target)
+    escaped_in_raw <- location_in_raw$escaped[[i]]
+
+
+    if (escaped_in_wrapped & !escaped_in_raw) {
+      str_sub(string, char_loc - 1, char_loc) <- target
+      location_in_wrapped <- str_locate_all(string, esc(target))[[1]]
+    }
+  }
+
+  string
+}
+
+esc <- function(x) {
+  paste0("\\", x)
 }

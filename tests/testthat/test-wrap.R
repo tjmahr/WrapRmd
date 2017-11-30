@@ -38,6 +38,16 @@ Google!](http://google.com)!
   expect_equal(str_rmd_wrap(string), string2)
 })
 
+test_that("does not escape !, [, ]", {
+  string <- "This is a confidence interval [0, 1], [0, 1]!"
+  expect_equal(str_rmd_wrap(string), string)
+})
+
+test_that("does not escape !, [, ] unless they are already escaped", {
+  string <- "This is a confidence interval [0, 1]! \\[0, 1\\]\\!"
+  expect_equal(str_rmd_wrap(string), string)
+})
+
 
 test_that("preserve paragraphs", {
 
