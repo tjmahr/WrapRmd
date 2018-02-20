@@ -125,43 +125,82 @@ str_rmd_wrap_one <- function(string, width = 80) {
 
 
 md_wrap <- function(string, width = 80, hardbreaks = FALSE, smart = FALSE,
-                     normalize = FALSE, extensions = TRUE) {
+                    normalize = FALSE, extensions = TRUE) {
   raw_string <- string
-  string %>%
+
+  wrapped <- string %>%
     commonmark::markdown_commonmark(
       hardbreaks = hardbreaks,
       extensions = extensions,
       normalize = normalize,
       smart = smart,
       width = width) %>%
-    str_replace("\\n$", "") %>%
+    str_replace("\\n$", "")
+
+  wrapped %>%
     unescape(raw_string, "[") %>%
     unescape(raw_string, "]") %>%
-    unescape(raw_string, "!")
+    unescape(raw_string, "!") %>%
+    restore_escape(raw_string, "\\@ref")
+}
 
-  # %>%
-  #   stringi::stri_replace_all_regex("\\\\(!(?!\\[))", "$1") %>%
-  #   stringi::stri_replace_all_regex("\\\\(!(?!\\[))", "$1") %>%
+restore_escape <- function(string, raw_string, target) {
+  # Find any instances of the unescaped form in the text
+  location_in_raw <- str_locate_all(raw_string, unesc(target))[[1]] %>%
+    as.data.frame()
+
+  # Check each use of see if it was escaped in the raw string
+  for (i in seq_along(location_in_raw$start)) {
+    char_loc <- location_in_raw$start[[i]]
+    char_end <- location_in_raw$end[[i]]
+    escaped <- substr(raw_string, char_loc - 1, char_end) == target
+    location_in_raw$escaped[[i]] <- escaped
+  }
+
+  # Find the target in the wrapped string
+  location_in_wrapped <- str_locate_all(string, unesc(target))[[1]] %>%
+    as.data.frame()
+
+  # Check for corruptions in the wrapped text
+  for (i in seq_along(location_in_wrapped[, 1])) {
+    char_loc <- location_in_wrapped$start[[i]]
+    char_end <- location_in_wrapped$end[[i]]
+    escaped_in_wrapped <- substr(string, char_loc - 1, char_end) == target
+    escaped_in_raw <- location_in_raw$escaped[[i]]
+
+    # If escape removed, add it and update target locations
+    if (!escaped_in_wrapped & escaped_in_raw) {
+      str_sub(string, char_loc, char_end) <- target
+      location_in_wrapped <- str_locate_all(string, unesc(target))[[1]] %>%
+        as.data.frame()
+    }
+  }
+
+  string
 }
 
 unescape <- function(string, raw_string, target) {
+  # Find the target in the original string
   location_in_raw <- str_locate_all(raw_string, esc(target))[[1]] %>%
     as.data.frame()
 
+  # Check each use of target to see if it was exepcted in the raw string
   for (i in seq_along(location_in_raw$start)) {
     char_loc <- location_in_raw$start[[i]]
     escaped <- substr(raw_string, char_loc - 1, char_loc) == esc(target)
     location_in_raw$escaped[[i]] <- escaped
   }
 
+  # Find the target in the wrapped string
   location_in_wrapped <- str_locate_all(string, esc(target))[[1]]
 
+  # Check for escapes in the wrapped text
   for (i in seq_along(location_in_wrapped[, 1])) {
     char_loc <- location_in_wrapped[i, 1]
     escaped_in_wrapped <- substr(string, char_loc - 1, char_loc) == esc(target)
     escaped_in_raw <- location_in_raw$escaped[[i]]
 
-
+    # If an escape was added, remove it and update target locations
     if (escaped_in_wrapped & !escaped_in_raw) {
       str_sub(string, char_loc - 1, char_loc) <- target
       location_in_wrapped <- str_locate_all(string, esc(target))[[1]]
@@ -173,4 +212,8 @@ unescape <- function(string, raw_string, target) {
 
 esc <- function(x) {
   paste0("\\", x)
+}
+
+unesc <- function(x) {
+  str_replace(x, "^\\\\", "")
 }

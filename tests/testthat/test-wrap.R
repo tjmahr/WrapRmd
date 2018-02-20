@@ -1,7 +1,6 @@
 context("wrap.R")
 
 test_that("basic wrapping", {
-
   no_code <- "regular words on a line"
   expect_equal(str_rmd_wrap(no_code), no_code)
 
@@ -13,7 +12,7 @@ test_that("basic wrapping", {
 
   expect_equal(str_rmd_wrap(long_paragraph), long_paragraph_wrap)
 
-
+  # The lines from the gif
   gif_lines <- "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante = `r length(letters) * 2 + 100`."
 
   gif_lines_wrap <-
@@ -38,19 +37,8 @@ Google!](http://google.com)!
   expect_equal(str_rmd_wrap(string), string2)
 })
 
-test_that("does not escape !, [, ]", {
-  string <- "This is a confidence interval [0, 1], [0, 1]!"
-  expect_equal(str_rmd_wrap(string), string)
-})
-
-test_that("does not escape !, [, ] unless they are already escaped", {
-  string <- "This is a confidence interval [0, 1]! \\[0, 1\\]\\!"
-  expect_equal(str_rmd_wrap(string), string)
-})
-
 
 test_that("preserve paragraphs", {
-
   paragraph_preserving <-
 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante = `r length(letters) * 2 + 100`.
 
@@ -127,8 +115,4 @@ text in p1. extra text in p1.
 text in p2.
 "
   expect_equal(str_rmd_wrap(paragraphs_sttsts), paragraphs_sttsts_wrapped)
-
-
 })
-
-
