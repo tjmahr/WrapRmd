@@ -127,6 +127,9 @@ str_rmd_wrap_one <- function(string, width = 80) {
 md_wrap <- function(string, width = 80, hardbreaks = FALSE, smart = FALSE,
                     normalize = FALSE, extensions = TRUE) {
   raw_string <- string
+  width <- getOption("WrapRmd.width", width)
+  smart <- getOption("WrapRmd.smart", smart)
+  extensions <- getOption("WrapRmd.extensions", extensions)
 
   wrapped <- string %>%
     commonmark::markdown_commonmark(
