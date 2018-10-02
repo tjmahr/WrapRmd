@@ -1,17 +1,22 @@
 Package: WrapRmd
 Title: RStudio Addin for Wrapping RMarkdown Paragraphs
-Description: Provides an RStudio addin for wrapping paragraphs in an RMarkdown
-    document without inserting linebreaks into spans of inline R code.
-Version: 0.0.0.9001
+Version: 0.0.0.9003
 Authors@R:
     person("Tristan", "Mahr", , "tristan.mahr@wisc.edu", role = c("aut", "cre"))
-Depends:
-    R (>= 3.1.0)
+Description: Provides an RStudio addin for wrapping paragraphs in an RMarkdown
+    document without inserting linebreaks into spans of inline R code.
 License: MIT + file LICENSE
-LazyData: true
-Imports:
-    stringr (>= 1.0.0),
+Depends: 
+    R (>= 3.1.0)
+Imports: 
+    commonmark,
     rstudioapi,
-    stringi
-RoxygenNote: 5.0.1
-Suggests: testthat
+    stringi,
+    stringr (>= 1.0.0),
+    magrittr
+Suggests: 
+    testthat
+LazyData: true
+RoxygenNote: 6.0.1.9000
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
