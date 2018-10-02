@@ -14,20 +14,7 @@ You can install the plain version WrapRmd from GitHub with:
 devtools::install_github("tjmahr/WrapRmd")
 ```
 
-The plain version is suitable for wrapping simple paragraphs of markdown text,
-as in the gifs below.
-
-To install the developmental branch, which uses
-[commonmark](https://cran.r-project.org/web/packages/commonmark/index.html) to
-reformat markdown, use:
-
-``` r
-devtools::install_github("tjmahr/WrapRmd", ref = "experimental")
-```
-
-The developmental version can handle markdown lists and will not break links,
-but it has some quirks that have to be ironed out.
-
+This package used the [commonmark](https://cran.r-project.org/web/packages/commonmark/index.html) package to wrap and reformat to markdown text. Using commonmark means that it can wrap links and markdown lists. The package does some additional work to handle inline R Markdown.
 
 ## Overview
 
