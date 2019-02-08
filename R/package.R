@@ -10,6 +10,7 @@
 NULL
 
 
+
 #' Wrap text but don't insert lines breaks into inline R code
 #'
 #' Call this addin to wrap paragraphs in an R Markdown document.
@@ -20,6 +21,22 @@ wrap_rmd_addin <- function() {
   selection <- context$selection
   text <- unlist(selection)["text"]
   rstudioapi::insertText(str_rmd_wrap(text))
+}
+
+
+#' Run selection through knitr and commonmark
+#'
+#' Call this addin to preview output of an R markdown selection.
+#'
+#' @export
+knit_selection_addin <- function() {
+  context <- rstudioapi::getActiveDocumentContext()
+  selection <- context$selection
+
+  text <- unlist(selection)["text"]
+  cat(
+    commonmark::markdown_commonmark(
+      knitr::knit(text = text, quiet = TRUE)))
 }
 
 
