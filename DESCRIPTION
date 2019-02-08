@@ -13,7 +13,8 @@ Imports:
     rstudioapi,
     stringi,
     stringr (>= 1.0.0),
-    magrittr
+    magrittr,
+    knitr
 Suggests: 
     testthat
 LazyData: true
