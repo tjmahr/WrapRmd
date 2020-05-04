@@ -3,7 +3,6 @@
 \docType{package}
 \name{WrapRmd}
 \alias{WrapRmd}
-\alias{WrapRmd-package}
 \title{WrapRmd}
 \description{
 Provides an RStudio addin for wrapping paragraphs in an RMarkdown document

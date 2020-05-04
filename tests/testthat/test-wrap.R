@@ -116,3 +116,30 @@ text in p2.
 "
   expect_equal(str_rmd_wrap(paragraphs_sttsts), paragraphs_sttsts_wrapped)
 })
+
+test_that("set column width directly", {
+  long_paragraph <- paste(sprintf("a%02d", 3 + 4 * 0:20) , collapse = " ")
+
+  long_paragraph_wrap_10 <-
+"a03 a07
+a11 a15
+a19 a23
+a27 a31
+a35 a39
+a43 a47
+a51 a55
+a59 a63
+a67 a71
+a75 a79
+a83"
+  long_paragraph_wrap_40 <-
+"a03 a07 a11 a15 a19 a23 a27 a31 a35 a39
+a43 a47 a51 a55 a59 a63 a67 a71 a75 a79
+a83"
+  long_paragraph_wrap_default <-
+"a03 a07 a11 a15 a19 a23 a27 a31 a35 a39 a43 a47 a51 a55 a59 a63 a67 a71 a75 a79
+a83"
+  expect_equal(str_rmd_wrap(long_paragraph, 10), long_paragraph_wrap_10)
+  expect_equal(str_rmd_wrap(long_paragraph, 40), long_paragraph_wrap_40)
+  expect_equal(str_rmd_wrap(long_paragraph), long_paragraph_wrap_default)
+})

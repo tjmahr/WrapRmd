@@ -4,12 +4,12 @@
 \alias{str_rmd_wrap}
 \title{Wrap text but don't insert lines breaks into inline R code}
 \usage{
-str_rmd_wrap(string, width = 80)
+str_rmd_wrap(string, width = getOption("WrapRmd.width", 80))
 }
 \arguments{
 \item{string}{a string to wrap}
 
-\item{width}{desired line width. Defaults to 80 characters.}
+\item{width}{desired line width. Defaults to \code{options("WrapRmd.width")}.}
 }
 \value{
 a wrapped copy of the string
