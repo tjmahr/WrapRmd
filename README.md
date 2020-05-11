@@ -48,7 +48,8 @@ a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante =
 Then go to Tools > Addins in RStudio to select and configure addins. I've mapped 
 this one addin to the shortcut `Ctrl + Shift + Alt + /`.
 
-Currently, the package wraps lines using a maximum line width of 80 characters.
+The package wraps lines using a maximum width set by `options("WrapRmd.width")`
+which currently defaults to `80` characters.
 
 It should work on multiple paragraphs:
 

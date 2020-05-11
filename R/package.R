@@ -15,6 +15,11 @@ NULL
 #'
 #' Call this addin to wrap paragraphs in an R Markdown document.
 #'
+#' The maximum line width can be set via \code{options(WrapRmd.width)}.
+#' Further fine tuning can be done via options \dQuote{WrapRmd.smart} and
+#' \dQuote{WrapRmd.extensions}, which are passed down to
+#' \code{\link{markdown_commonmark}}.
+#'
 #' @export
 wrap_rmd_addin <- function() {
   context <- rstudioapi::getActiveDocumentContext()
@@ -43,7 +48,7 @@ knit_selection_addin <- function() {
 #' Wrap text but don't insert lines breaks into inline R code
 #'
 #' @param string a string to wrap
-#' @param width desired line width. Defaults to 80 characters.
+#' @param width desired line width. Defaults to \code{options("WrapRmd.width")}.
 #' @return a wrapped copy of the string
 #'
 #' @details This function finds all inline R code spans in a string, replaces
@@ -52,7 +57,7 @@ knit_selection_addin <- function() {
 #'
 #'   This function preserves blanks lines between paragraphs.
 #' @export
-str_rmd_wrap <- function(string, width = 80) {
+str_rmd_wrap <- function(string, width = getOption("WrapRmd.width", 80)) {
   # Assume paragraphs are separated by [newline][optional spaces][newline].
   re_paragraph_sep <- "(\\n\\s*\\n)"
 
@@ -78,7 +83,7 @@ str_rmd_wrap <- function(string, width = 80) {
     unname()
 
   # Wrap each paragraph.
-  paragraphs <- Map(str_rmd_wrap_one, paragraphs) %>%
+  paragraphs <- Map(function(...) str_rmd_wrap_one(..., width), paragraphs) %>%
     unlist %>%
     unname()
 
@@ -101,7 +106,7 @@ str_interleave <- function(strings, interleaves) {
 }
 
 
-str_rmd_wrap_one <- function(string, width = 80) {
+str_rmd_wrap_one <- function(string, width) {
   output <- string
 
   re_inline_code <- "(`r)( )([^`]+`)"
@@ -133,7 +138,7 @@ str_rmd_wrap_one <- function(string, width = 80) {
   for (i in seq_along(inline_code)) {
     output <- stringi::stri_replace_first_coll(
       str = output,
-      pattern = md_wrap(spaceless_code[i]),
+      pattern = md_wrap(spaceless_code[i], width),
       replacement = inline_code[i])
   }
 
@@ -141,12 +146,13 @@ str_rmd_wrap_one <- function(string, width = 80) {
 }
 
 
-md_wrap <- function(string, width = 80, hardbreaks = FALSE, smart = FALSE,
-                    normalize = FALSE, extensions = TRUE) {
+md_wrap <- function(string,
+                    width,
+                    hardbreaks = FALSE,
+                    smart = getOption("WrapRmd.smart", FALSE),
+                    normalize = FALSE,
+                    extensions = getOption("WrapRmd.extensions", TRUE)) {
   raw_string <- string
-  width <- getOption("WrapRmd.width", width)
-  smart <- getOption("WrapRmd.smart", smart)
-  extensions <- getOption("WrapRmd.extensions", extensions)
 
   wrapped <- string %>%
     commonmark::markdown_commonmark(

@@ -18,6 +18,6 @@ Imports:
 Suggests: 
     testthat
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
