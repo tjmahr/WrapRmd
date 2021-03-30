@@ -110,14 +110,24 @@ str_rmd_wrap_one <- function(string, width) {
   output <- string
 
   re_inline_code <- "(`r)( )([^`]+`)"
+  re_cross_references <- "(\\w+\\\\ \\\\@ref\\(.*?\\))"
   re_nonword <- "\\W|_"
 
   inline_code <- string %>%
     str_extract_all(re_inline_code) %>%
     unlist()
 
-  # Just wrap if no code
-  if (length(inline_code) == 0) {
+  cross_references <- string %>%
+    str_extract_all(re_cross_references) %>%
+    unlist()
+
+  wrap_ignore <- c(
+    inline_code,
+    cross_references
+  )
+
+  # Just wrap if no code or cross-references
+  if (length(wrap_ignore) == 0) {
     return(md_wrap(string, width))
   }
 
@@ -125,21 +135,22 @@ str_rmd_wrap_one <- function(string, width) {
 
   # I used to replace with "_" but md_wrap() escapes them as "\\_" which messes
   # up the line width
-  spaceless_code <- str_replace_all(inline_code, re_nonword, "Q")
+  spaceless_wrap_ignore <- str_replace_all(wrap_ignore, re_nonword, "Q")
 
-  for (i in seq_along(inline_code)) {
-    output <- str_replace(output, coll(inline_code[i]), spaceless_code[i])
+  for (i in seq_along(wrap_ignore)) {
+    output <- str_replace(output, coll(wrap_ignore[i]), spaceless_wrap_ignore[i])
   }
 
   # Wrap
   output <- md_wrap(output, width)
 
   # Put original code spans back
-  for (i in seq_along(inline_code)) {
+  for (i in seq_along(wrap_ignore)) {
     output <- stringi::stri_replace_first_coll(
       str = output,
-      pattern = md_wrap(spaceless_code[i], width),
-      replacement = inline_code[i])
+      pattern = md_wrap(spaceless_wrap_ignore[i], width),
+      replacement = wrap_ignore[i]
+    )
   }
 
   output

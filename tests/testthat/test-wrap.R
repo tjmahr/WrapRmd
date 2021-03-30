@@ -34,6 +34,20 @@ It's very easy to make some words **bold** and a [link to
 Google!](http://google.com)!
 "
 
+    expect_equal(str_rmd_wrap(string), string2)
+})
+
+test_that("does not break cross-references (#16)", {
+  string <- "
+Here is some inline code `r hello` and cross-references to Figure\\ \\@ref(fig:test-figure). Also Table\\ \\@ref(tab:test-table) and\\ \\@ref(fig:test-figure).
+"
+
+  string2 <- "
+Here is some inline code `r hello` and cross-references to
+Figure\\ \\@ref(fig:test-figure). Also Table\\ \\@ref(tab:test-table)
+and\\ \\@ref(fig:test-figure).
+"
+
   expect_equal(str_rmd_wrap(string), string2)
 })
 
