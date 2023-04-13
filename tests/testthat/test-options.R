@@ -1,5 +1,3 @@
-context("test-options.R")
-
 test_that("wrapping can use options()", {
   # Default is 80
   long_paragraph <-

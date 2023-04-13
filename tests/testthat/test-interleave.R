@@ -1,5 +1,3 @@
-context("interleave.R")
-
 test_that("interleaving strings", {
   # sneak private function out
   str_interleave <- WrapRmd:::str_interleave

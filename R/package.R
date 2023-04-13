@@ -6,9 +6,7 @@
 #' @name WrapRmd
 #' @docType package
 #' @import stringr
-#' @importFrom utils head tail
 NULL
-
 
 
 #' Wrap text but don't insert lines breaks into inline R code
@@ -41,7 +39,9 @@ knit_selection_addin <- function() {
   text <- unlist(selection)["text"]
   cat(
     commonmark::markdown_commonmark(
-      knitr::knit(text = text, quiet = TRUE)))
+      knitr::knit(text = text, quiet = TRUE)
+    )
+  )
 }
 
 
@@ -69,7 +69,8 @@ str_rmd_wrap <- function(string, width = getOption("WrapRmd.width", 80)) {
     re_blanks_at_start,
     re_paragraph_sep,
     re_blanks_at_close,
-    sep = "|")
+    sep = "|"
+  )
 
   # Find paragraph separations
   paragraph_seps <- string %>%
@@ -79,12 +80,12 @@ str_rmd_wrap <- function(string, width = getOption("WrapRmd.width", 80)) {
   # Split at those points to get paragraphs.
   paragraphs <- string %>%
     str_split(re_start_or_sep_or_close) %>%
-    unlist %>%
+    unlist() %>%
     unname()
 
   # Wrap each paragraph.
   paragraphs <- Map(function(...) str_rmd_wrap_one(..., width), paragraphs) %>%
-    unlist %>%
+    unlist() %>%
     unname()
 
   str_interleave(paragraphs, paragraph_seps)
@@ -97,8 +98,8 @@ str_interleave <- function(strings, interleaves) {
   stopifnot(length(strings) - length(interleaves) == 1)
 
   # Pop the first string off. Concatenate pairs of interleaves and strings.
-  start <- head(strings, 1)
-  left <- tail(strings, -1)
+  start <- utils::head(strings, 1)
+  left <- utils::tail(strings, -1)
   body <- paste0(interleaves, left, collapse = "")
 
   # Reattach head
@@ -109,42 +110,54 @@ str_interleave <- function(strings, interleaves) {
 str_rmd_wrap_one <- function(string, width) {
   output <- string
 
+  # Patterns to protect from line breaks
   re_inline_code <- "(`r)( )([^`]+`)"
+  re_inline_math <- "((?!=[$])[$][^$]+[$])"
   re_cross_references <- "(\\w+\\\\ \\\\@ref\\(.*?\\))"
-  re_nonword <- "\\W|_"
 
+  # Locate the patterns
   inline_code <- string %>%
     str_extract_all(re_inline_code) %>%
+    unlist()
+
+  inline_math <- string %>%
+    str_extract_all(re_inline_math) %>%
     unlist()
 
   cross_references <- string %>%
     str_extract_all(re_cross_references) %>%
     unlist()
 
+  # Substrings that match the patterns
   wrap_ignore <- c(
     inline_code,
+    inline_math,
     cross_references
   )
 
-  # Just wrap if no code or cross-references
+  # Just wrap if no substrings need to be protected
   if (length(wrap_ignore) == 0) {
     return(md_wrap(string, width))
   }
 
-  # Make R code spans into long words
+  # Make protected strings spans into long words
 
-  # I used to replace with "_" but md_wrap() escapes them as "\\_" which messes
-  # up the line width
+  # Replace all nonwords and _'s with Qs
+  re_nonword <- "\\W|_"
   spaceless_wrap_ignore <- str_replace_all(wrap_ignore, re_nonword, "Q")
 
   for (i in seq_along(wrap_ignore)) {
-    output <- str_replace(output, coll(wrap_ignore[i]), spaceless_wrap_ignore[i])
+    output <- str_replace(
+      string = output,
+      pattern = coll(wrap_ignore[i]),
+      replacement = spaceless_wrap_ignore[i]
+    )
   }
 
-  # Wrap
+  # Wrap the text now that the strings are protected
   output <- md_wrap(output, width)
 
-  # Put original code spans back
+  # Put original versions of protected strings back in
   for (i in seq_along(wrap_ignore)) {
     output <- stringi::stri_replace_first_coll(
       str = output,
@@ -157,12 +170,14 @@ str_rmd_wrap_one <- function(string, width) {
 }
 
 
-md_wrap <- function(string,
-                    width,
-                    hardbreaks = FALSE,
-                    smart = getOption("WrapRmd.smart", FALSE),
-                    normalize = FALSE,
-                    extensions = getOption("WrapRmd.extensions", TRUE)) {
+md_wrap <- function(
+  string,
+  width,
+  hardbreaks = FALSE,
+  smart = getOption("WrapRmd.smart", FALSE),
+  normalize = FALSE,
+  extensions = getOption("WrapRmd.extensions", TRUE)
+) {
   raw_string <- string
 
   wrapped <- string %>%
@@ -171,7 +186,8 @@ md_wrap <- function(string,
       extensions = extensions,
       normalize = normalize,
       smart = smart,
-      width = width) %>%
+      width = width
+    ) %>%
     str_replace("\\n$", "")
 
   wrapped %>%

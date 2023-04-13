@@ -1,5 +1,3 @@
-context("wrap.R")
-
 test_that("basic wrapping", {
   no_code <- "regular words on a line"
   expect_equal(str_rmd_wrap(no_code), no_code)
