@@ -1,6 +1,6 @@
 Package: WrapRmd
 Title: RStudio Addin for Wrapping RMarkdown Paragraphs
-Version: 0.0.0.9004
+Version: 0.0.0.9005
 Authors@R: c(
     person("Tristan", "Mahr", , "tristan.mahr@wisc.edu", role = c("aut", "cre")),
     person("Shir", "Dekel", email = "shirdekel@yahoo.com.au", role = "ctb", comment = c(ORCID = "0000-0003-1773-2446"))
