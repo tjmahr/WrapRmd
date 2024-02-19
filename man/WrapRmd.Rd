@@ -2,9 +2,19 @@
 % Please edit documentation in R/package.R
 \docType{package}
 \name{WrapRmd}
+\alias{WrapRmd-package}
 \alias{WrapRmd}
 \title{WrapRmd}
 \description{
 Provides an RStudio addin for wrapping paragraphs in an RMarkdown document
 without inserting linebreaks into spans of inline R code.
+}
+\author{
+\strong{Maintainer}: Tristan Mahr \email{tristan.mahr@wisc.edu}
+
+Other contributors:
+\itemize{
+  \item Shir Dekel \email{shirdekel@yahoo.com.au} (\href{https://orcid.org/0000-0003-1773-2446}{ORCID}) [contributor]
+}
+
 }

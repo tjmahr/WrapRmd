@@ -4,9 +4,8 @@
 #' without inserting linebreaks into spans of inline R code.
 #'
 #' @name WrapRmd
-#' @docType package
 #' @import stringr
-NULL
+"_PACKAGE"
 
 
 #' Wrap text but don't insert lines breaks into inline R code
@@ -191,9 +190,10 @@ md_wrap <- function(
     str_replace("\\n$", "")
 
   wrapped %>%
-    unescape(raw_string, "[") %>%
-    unescape(raw_string, "]") %>%
-    unescape(raw_string, "!") %>%
+    unescape(raw_string, stringr::fixed("[")) %>%
+    unescape(raw_string, stringr::fixed("]")) %>%
+    unescape(raw_string, stringr::fixed("!")) %>%
+    unescape_latex_words(raw_string) %>%
     restore_escape(raw_string, "\\@ref")
 }
 
@@ -232,36 +232,61 @@ restore_escape <- function(string, raw_string, target) {
   string
 }
 
+unescape_latex_words <- function(string, raw_string) {
+  latex_words <- raw_string %>%
+    stringr::str_extract_all("\\\\[A-Za-z]+\\{") %>%
+    unlist() %>%
+    unique()
+
+  for (word in latex_words) {
+    string <- unescape(string, raw_string, fixed(word))
+  }
+  string
+
+}
+
 unescape <- function(string, raw_string, target) {
+  esc_target <- if (inherits(target, "stringr_fixed")) {
+    target
+  } else {
+    esc(target)
+  }
+
   # Find the target in the original string
-  location_in_raw <- str_locate_all(raw_string, esc(target))[[1]] %>%
+  location_in_raw <- raw_string %>%
+    str_locate_all(esc_target) %>%
+    getElement(1) %>%
     as.data.frame()
 
-  # Check each use of target to see if it was exepcted in the raw string
+  # Check each use of target to see if it was escaped in the raw string
   for (i in seq_along(location_in_raw$start)) {
     char_loc <- location_in_raw$start[[i]]
-    escaped <- substr(raw_string, char_loc - 1, char_loc) == esc(target)
+    char_loc_end <- location_in_raw$end[[i]]
+    escaped <- substr(raw_string, char_loc - 1, char_loc_end) == esc(esc_target)
     location_in_raw$escaped[[i]] <- escaped
   }
 
   # Find the target in the wrapped string
-  location_in_wrapped <- str_locate_all(string, esc(target))[[1]]
+  location_in_wrapped <- str_locate_all(string, esc_target)[[1]]
 
   # Check for escapes in the wrapped text
   for (i in seq_along(location_in_wrapped[, 1])) {
     char_loc <- location_in_wrapped[i, 1]
-    escaped_in_wrapped <- substr(string, char_loc - 1, char_loc) == esc(target)
+    char_loc_end <- location_in_wrapped[i, 2]
+
+    escaped_in_wrapped <- substr(string, char_loc - 1, char_loc_end) == esc(esc_target)
     escaped_in_raw <- location_in_raw$escaped[[i]]
 
     # If an escape was added, remove it and update target locations
     if (escaped_in_wrapped & !escaped_in_raw) {
-      str_sub(string, char_loc - 1, char_loc) <- target
-      location_in_wrapped <- str_locate_all(string, esc(target))[[1]]
+      str_sub(string, char_loc - 1, char_loc_end) <- target
+      location_in_wrapped <- str_locate_all(string, esc_target)[[1]]
     }
   }
 
   string
 }
+
 
 esc <- function(x) {
   paste0("\\", x)

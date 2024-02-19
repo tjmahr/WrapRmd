@@ -20,3 +20,12 @@ test_that("escape \ in math mode", {
 })
 
 
+test_that("no escape LaTeX", {
+  string <-
+"Someone said something [@bibref-to-article], and I am doing something in
+\\experiment{1} to test it."
+
+  expect_equal(str_rmd_wrap(string, 80), string)
+})
+
+

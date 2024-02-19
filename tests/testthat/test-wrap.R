@@ -1,6 +1,9 @@
 test_that("basic wrapping", {
   no_code <- "regular words on a line"
-  expect_equal(str_rmd_wrap(no_code), no_code)
+  expect_equal(
+    str_rmd_wrap(no_code),
+    no_code
+  )
 
   long_paragraph <- "`r hello` and `r 1 + 1` and `r 1 + b + b + c` and drop a line right here `r maybe_here` `r goodbye`"
 

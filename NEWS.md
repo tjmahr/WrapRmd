@@ -1,3 +1,8 @@
+# WrapRmd 0.0.0.9006
+
+  - LaTeX-looking words (matching `\[A-Za-z]{`) are unescaped if 
+    commonmark escaped the leading backslash.
+
 # WrapRmd 0.0.0.9005
 
   - Inline math (that starts and ends with a `$` character) is treated like R 
