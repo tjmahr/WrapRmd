@@ -12,11 +12,11 @@
 #'
 #' Call this addin to wrap paragraphs in an R Markdown document.
 #'
-#' The maximum line width can be set via \code{options(WrapRmd.width)}.
-#' Further fine tuning can be done via options \dQuote{WrapRmd.smart} and
-#' \dQuote{WrapRmd.extensions}, which are passed down to
-#' \code{\link{markdown_commonmark}}.
-#'
+#' The maximum line width can be set via `options(WrapRmd.width)`.
+#' Further fine tuning can be done via options `WrapRmd.smart` and
+#' `WrapRmd.extensions`, which are passed down to
+#' [commonmark::markdown_commonmark()].
+#' @md
 #' @export
 wrap_rmd_addin <- function() {
   context <- rstudioapi::getActiveDocumentContext()
@@ -41,6 +41,19 @@ knit_selection_addin <- function() {
       knitr::knit(text = text, quiet = TRUE)
     )
   )
+}
+
+
+#' Convert back slashes to forward slashes
+#'
+#' Call this addin to convert `\\drive\folder` to `//drive/folder`
+#'
+#' @export
+flip_backslashes_addin <- function() {
+  context <- rstudioapi::getActiveDocumentContext()
+  selection <- context$selection
+  text <- unlist(selection)["text"]
+  rstudioapi::insertText(stringr::str_replace_all(text, "\\\\", "/"))
 }
 
 

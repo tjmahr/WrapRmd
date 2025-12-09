@@ -1,3 +1,7 @@
+# WrapRmd 0.0.0.9007
+
+  - New adding: flip_backslashes_addin to convert `\` to `/`
+
 # WrapRmd 0.0.0.9006
 
   - LaTeX-looking words (matching `\[A-Za-z]{`) are unescaped if 
@@ -16,4 +20,4 @@
 
 # WrapRmd 0.0.0.9003
 
-* Added a `NEWS.md` file to track changes to the package.
+  - Added a `NEWS.md` file to track changes to the package.

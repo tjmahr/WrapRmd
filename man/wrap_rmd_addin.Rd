@@ -11,7 +11,7 @@ Call this addin to wrap paragraphs in an R Markdown document.
 }
 \details{
 The maximum line width can be set via \code{options(WrapRmd.width)}.
-Further fine tuning can be done via options \dQuote{WrapRmd.smart} and
-\dQuote{WrapRmd.extensions}, which are passed down to
-\code{\link{markdown_commonmark}}.
+Further fine tuning can be done via options \code{WrapRmd.smart} and
+\code{WrapRmd.extensions}, which are passed down to
+\code{\link[commonmark:commonmark]{commonmark::markdown_commonmark()}}.
 }

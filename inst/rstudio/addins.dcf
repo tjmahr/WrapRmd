@@ -7,3 +7,8 @@ Name: Knit Selection
 Description: Run selection through knitr/commonmark to preview results.
 Binding: knit_selection_addin
 Interactive: false
+
+Name: Flip Back Slashes to Forward Slashes
+Description: Convert `\` to `/` in selection.
+Binding: flip_backslashes_addin
+Interactive: false
