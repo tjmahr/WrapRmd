@@ -12,11 +12,12 @@ You can install the plain version WrapRmd from GitHub with:
 devtools::install_github("tjmahr/WrapRmd")
 ```
 
-This package used the
+This package uses
 [commonmark](https://cran.r-project.org/web/packages/commonmark/index.html)
-package to wrap and reformat to markdown text. Using commonmark means that it
-can wrap links and markdown lists. The package does some additional work to
-handle inline R Markdown.
+to wrap and reformat markdown text. Because wrapping goes through commonmark,
+selected text may be normalized/reformatted during rewrapping (for example, in
+links or list formatting). The package does some additional work to handle
+inline R Markdown.
 
 ## Overview
 
@@ -47,8 +48,7 @@ a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante =
 
 ## Notes
 
-Then go to Tools > Addins in RStudio to select and configure addins. I've mapped 
-this one addin to the shortcut `Ctrl + Shift + Alt + /`.
+Then go to Tools > Addins in RStudio to select and configure addins.
 
 The package wraps lines using a maximum width set by `options("WrapRmd.width")`
 which currently defaults to `80` characters.
@@ -56,3 +56,12 @@ which currently defaults to `80` characters.
 It should work on multiple paragraphs:
 
 ![Animation of wrapping paragraphs separately](multi_paragraph.gif)
+
+## Bonus Addins
+
+- `knit_selection`: Runs the selected text through knitr/commonmark so you can
+  preview what the rendered markdown/html output will look like.
+- `flip_backslashes`: Converts Windows-style backslashes (`\`) to forward
+  slashes (`/`) in the current selection.
+- `assign_argument_defaults`: Evaluates comma-separated `x = y` expressions in
+  the current selection and assigns each value in the global environment.
