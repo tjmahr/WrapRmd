@@ -12,3 +12,8 @@ Name: Flip Back Slashes to Forward Slashes
 Description: Convert `\` to `/` in selection.
 Binding: flip_backslashes_addin
 Interactive: false
+
+Name: Assign argument defaults
+Description: Evaluates all comma-separated `x = y` expressions in a selection.
+Binding: assign_argument_defaults_addin
+Interactive: false

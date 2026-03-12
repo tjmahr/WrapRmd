@@ -1,6 +1,13 @@
+# WrapRmd 0.0.0.9008
+
+  - New addin: assign_argument_defaults_addin to evaluate comma-separated 
+    assignment expressions in a selection such as `x = 10, label = "test"`. 
+    This addin makes it easy to assign default argument values for 
+    interactively working on the body of a function.
+
 # WrapRmd 0.0.0.9007
 
-  - New adding: flip_backslashes_addin to convert `\` to `/`
+  - New addin: flip_backslashes_addin to convert `\` to `/`
 
 # WrapRmd 0.0.0.9006
 
