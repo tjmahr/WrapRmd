@@ -1,0 +1,41 @@
+
+
+
+
+The built-in `mtcars` dataset contains `r nrow(mtcars)` observations and
+`r ncol(mtcars)` columns.
+
+The heaviest car in the `mtcars` dataset is the
+`r rownames(mtcars[which.max(mtcars$wt),])`, a stupendously heavy car. The
+lightest car is the `r rownames(mtcars[which.min(mtcars$wt),])`, its elegant
+name befitting its lithe build.
+
+
+
+
+ChatGPT recommended the following command for converting an mp4 to a gif.
+
+```
+ffmpeg -i "Screen Recording 2026-03-12 150622.mp4" -vf "fps=12,scale=900:-1:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=diff[p];[s1][p]paletteuse=dither=bayer:bayer_scale=5" output.gif
+
+ffmpeg -i "Screen Recording 2026-03-12 150511.mp4" -vf "fps=12,scale=900:-1:flags=lanczos,split[s0][s1];[s0]palettegen=stats_mode=diff[p];[s1][p]paletteuse=dither=bayer:bayer_scale=5" output.gif
+```
+
+
+
+
+
+
+
+Release notes:
+- Fixed a bug which implied **somehow**&mdash;godlessly and ruinously&mdash;that 4&nbsp;&minus;&nbsp;2&nbsp;&ge;&nbsp;3
+- Added unit tests to confirm that 4&nbsp;&divide;&nbsp;2&nbsp;&ge;&nbsp;0. Closes issues #6 or #7.
+
+
+
+
+
+
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante = `r length(letters) * 2 + 100`.
+
