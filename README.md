@@ -48,7 +48,9 @@ a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante =
 
 ## Notes
 
-Then go to Tools > Addins in RStudio to select and configure addins.
+Then go to Tools > Addins in RStudio to select and configure addins. You
+can also browse and run them from Tools > Show Command Palette with
+`Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS).
 
 The package wraps lines using a maximum width set by `options("WrapRmd.width")`
 which currently defaults to `80` characters.
