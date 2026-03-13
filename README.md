@@ -7,7 +7,7 @@ of RMarkdown text without inserting line breaks into inline R code.
 
 ## Installation
 
-You can install the plain version WrapRmd from GitHub with:
+Install WrapRmd from GitHub with:
 
 ``` r
 # install.packages("devtools")
@@ -16,11 +16,16 @@ devtools::install_github("tjmahr/WrapRmd")
 
 ## Overview
 
-Here is some nice looking RMarkdown:
+Here is some nice looking RMarkdown text, but it runs well past the 80 character
+width we'd like to maintain in our document.
 
 ```
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a `r max(iris$Sepal.Length)`, viverra nisl at, luctus ante = `r length(letters) * 2 + 100`.
 ```
+
+The inline R code `r max(iris$Sepal.Length)` runs from column 72 to column 96.
+The most natural place to insert a line break is the space `r` between
+`max(iris$Sepal.Length)`. That would unfortunately break the inline R code.
 
 If we highlight the text and call the Wrap Rmd addin, we get the following:
 
@@ -31,8 +36,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a
 ```
 
 Importantly, there is *no* line break inserted inside of the inline R code
-`r max(iris$Sepal.Length)`, meaning that wrapping the text will not break 
-inline R code.
+`r max(iris$Sepal.Length)`, meaning that wrapping the text will not break inline
+R code.
 
 ### Normalization
 
@@ -41,8 +46,8 @@ This package uses
 wrap and reformat markdown text. This pipeline is advantageous because
 commonmark handles the difficult work of parsing the markdown text. But because
 wrapping goes through commonmark, selected text may be normalized or escaped
-during rewrapping. What this package provides is some additional work to handle
-inline R Markdown and to undo some of the commonmark normalization that
+during rewrapping. What the WrapRmd package provides is some additional work to
+handle inline R Markdown and to undo some of the commonmark normalization that
 conflicts with RMarkdown features.
 
 In the following animation, we can see three (useful) commonmark normalizations:
@@ -55,16 +60,23 @@ character.
 
 ### Other notes
 
-There are two ways to run or view addins.
+**How to run addins**. There are two ways to run or view addins.
 
-1.  Tools > Addins, to view addins, run them, or set keyboard shortcuts.
+1.  Tools \> Addins, to view addins, run them, or set keyboard shortcuts.
 
-2.  Tools > Show Command Palette, then start typing the name of the addin to
+2.  Tools \> Show Command Palette, then start typing the name of the addin to
     run. As a reminder, the Command Palette's keyboard shortcut is
     `Ctrl+Shift+P` or `Cmd+Shift+P`.
 
-The package wraps lines using a maximum width set by `options("WrapRmd.width")`
-which currently defaults to `80` characters.
+**Package options**. There are three package options with the following default
+values. See `?commonmark::markdown_commonmark()`
+
+``` r
+WrapRmd.width = 80         # desired width of output text
+WrapRmd.smart = FALSE      # whether to use "smart" punctuation 
+WrapRmd.extensions = TRUE  # whether to enable GitHub extensions
+```
+
 
 ## Bonus Addins
 
